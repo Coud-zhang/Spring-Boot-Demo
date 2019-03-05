@@ -1,0 +1,92 @@
+#d当前激活的环境:Dev
+spring:
+  profiles:
+    active: dev
+#配置项目编码
+  http:
+    encoding:
+      enabled: true
+      charset: utf-8
+---
+#Spring多环境配置--生产环境
+
+#端口配置
+server:
+  port: 80
+spring:
+  profiles: prod
+#多环境日志配置--生产环境，控制台打印日志和文件打印日志
+#logging:
+#  level:
+#    com.zkq.boot_demo: warn
+#  path: /spring/log
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+#    file:
+
+---
+#Spring多环境配置--开发环境
+#端口配置
+server:
+  port: 8081
+spring:
+  profiles: dev
+  datasource:
+    username: root
+    password: zkq162534
+    url: jdbc:mysql://127.0.0.1:3306/aaaa?serverTimeZone=Shanghai&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #   数据源其他配置
+    initialSize: 5      #初始化链接数量
+    minIdle: 5              #最小连接池数量
+    maxActive: 20            #最大连接池数量
+    maxWait: 60000           #获取连接时最大等待时间，单位毫秒
+    timeBetweenEvictionRunsMillis: 60000     #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000          #配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: SELECT 1 FROM DUAL              #测试连接
+    testWhileIdle: true         #申请连接的时候检测，建议配置为true，不影响性能，并且保证安全性
+    testOnBorrow: false           #获取连接时执行检测，建议关闭，影响性能
+    testOnReturn: false             #归还连接时执行检测，建议关闭，影响性能
+    poolPreparedStatements: false              #是否开启PSCache，PSCache对支持游标的数据库性能提升巨大，oracle建议开启，mysql下建议关闭
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  jpa:
+    database: mysql
+    #控制台显示SQL
+    show-sql: true
+    hibernate:
+       #create----每次运行该程序，没有表格会新建表格，表内有数据会清空
+       #create-drop----每次程序结束的时候会清空表
+       #update----每次运行程序，没有表格会新建表格，表内有数据不会清空，只会更新
+       #validate----运行程序会校验数据与数据库的字段类型是否相同，不同会报错
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#开启debug=true可以在控制台打印出那些自动配置类生效了
+debug: true
+#mybatis:
+#  configuration:
+#    map-underscore-to-camel-case: true
+#  config-location:
+#  mapper-locations:
+#多环境日志配置--开发环境，只在控制台打印日志
+#logging:
+  #level:
+#    com.zkq.boot_demo: debug
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+---
+#Spring多环境配置--测试环境
+#端口配置
+server:
+  port: 8081
+spring:
+  profiles: test

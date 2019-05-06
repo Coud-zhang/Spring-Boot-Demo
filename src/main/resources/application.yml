@@ -72,11 +72,13 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 #开启debug=true可以在控制台打印出那些自动配置类生效了
 debug: true
-#mybatis:
-#  configuration:
-#    map-underscore-to-camel-case: true
-#  config-location:
-#  mapper-locations:
+mybatis:
+#开启驼峰映射
+  configuration:
+    map-underscore-to-camel-case: true
+    #xml映射文件位置
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zkq.schoolshop.pojo
 #多环境日志配置--开发环境，只在控制台打印日志
 #logging:
   #level:
